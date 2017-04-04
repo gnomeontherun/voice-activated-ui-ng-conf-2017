@@ -1,0 +1,73 @@
+<header class="header-6">
+  <div class="branding">
+    <span class="title" *ngIf="items.length">{{items[0].seriesName}}</span>
+    <span class="title" *ngIf="!items.length">Make a request to view data about countries.</span>
+  </div>
+  <form class="search" (submit)="onCommand($event)">
+      <label for="command">
+          <input id="command" name="command" type="text" [(ngModel)]="command" placeholder="Type in a command...">
+      </label>
+  </form>
+  <div class="header-actions">
+    <!--<button (click)="toggleMode()" class="btn btn-primary">Toggle Display Mode</button>-->
+  </div>
+</header>
+
+<div *ngIf="!items?.length" class="row">
+  <div class="col-xs-6 offset-xs-3">
+    <div class="card">
+      <div class="card-header">Try some queries like:</div>
+      <div class="card-block">
+        <ul class="list">
+          <li (click)="try($event)">Show me countries with the most people.</li>
+          <li (click)="try($event)">Which countries have the largest economy?</li>
+          <li (click)="try($event)">What countries are the most rural?</li>
+          <li (click)="try($event)">Show me a chart of countries with the largest urban population.</li>
+          <li (click)="try($event)">Display a chart of the smallest economies.</li>
+          <li (click)="try($event)">Show population trends for China.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="items?.length">
+  <div *ngIf="mode == 'chart'" style="width: 100%; height: 500px">
+    <ngx-charts-bar-vertical
+      [results]="items"
+      [scheme]="scheme"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="false"
+      [showXAxisLabel]="false"
+      [showYAxisLabel]="false"
+      [xAxisLabel]="false"
+      [yAxisLabel]="false">
+    </ngx-charts-bar-vertical>
+  </div>
+
+  <clr-datagrid *ngIf="mode == 'list'">
+    <clr-dg-column>Country</clr-dg-column>
+    <clr-dg-column>2015</clr-dg-column>
+
+    <clr-dg-placeholder>No data to show yet.</clr-dg-placeholder>
+
+    <clr-dg-row *clrDgItems="let item of items">
+      <clr-dg-cell>{{item.countryName}}</clr-dg-cell>
+      <clr-dg-cell *ngIf="metric.format === 'percent'">{{item.value | number:'.1'}}%</clr-dg-cell>
+      <clr-dg-cell *ngIf="metric.format === 'number'">{{item.value | number:'.0'}}</clr-dg-cell>
+      <clr-dg-cell *ngIf="metric.format === 'currency'">{{item.value | currency:'USD':true:'.0'}}</clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-footer>Showing {{items.length}} countries
+      <clr-dg-pagination [(clrDgPage)]="page"></clr-dg-pagination>
+    </clr-dg-footer>
+  </clr-datagrid>
+</div>
+
+<clr-modal [(clrModalOpen)]="loading" [clrModalClosable]="false">
+  <div class="modal-body">
+    <h3><q>{{result?.resolvedQuery}}</q></h3>
+    <div class="spinner spinner-md"></div>
+  </div>
+</clr-modal>

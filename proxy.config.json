@@ -1,0 +1,6 @@
+{
+  "/api": {
+    "target": "https://api.api.ai",
+    "changeOrigin": true
+  }
+}

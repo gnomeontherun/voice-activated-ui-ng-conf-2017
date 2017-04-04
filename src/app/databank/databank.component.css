@@ -1,0 +1,23 @@
+clr-modal /deep/ .modal-body {
+  text-align: center;
+}
+
+#command {
+  width: 400px;
+  border-radius: 2px;
+  background: rgb(2, 64, 97);
+  padding-left: 5px;
+  color: #fff
+}
+
+div.header-actions .btn {
+  margin-top: 12px;
+}
+
+.list li:hover {
+  cursor: pointer;
+}
+
+/deep/ .datagrid-cell {
+  width: 50%;
+}
